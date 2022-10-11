@@ -8,6 +8,9 @@ development/*
 !development/README.md
 !development/vscode-example/
 
+quick-deploy/*
+!quick-deploy/README.md
+
 # Pycharm
 .idea
 
