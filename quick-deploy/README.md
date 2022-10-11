@@ -1,6 +1,8 @@
 # Getting Started With Quick Deploy
 
 Possibly suitable for small scale deployments. 
+
+- Currently does not include nginx. Can be used behind a load balancer like AWS Application Load Balancer that includes SSL etc. Nginx still needs to be added. see https://github.com/frappe/frappe_docker/issues/858
 - For production deployments please see this guide: https://github.com/frappe/frappe_docker/blob/main/docs/single-server-example.md
 - For setting up conatiners for development please see this guide: https://github.com/frappe/frappe_docker/blob/Quick_Start/development/README.md
 
@@ -41,13 +43,30 @@ Open `.quick-deploy-container/docker-compose.yml` with a text editor and replace
 
 ### Start containers
 
+Ensure you have the latest version of the required containers.
 ```shell
-docker-compose -f .devcontainer/docker-compose.yml up -d
+docker pull redis:alpine
+docker pull frappe/bench:latest
 ```
+
+
+## Docker Compose V1
+
+```shell
+docker-compose -f .quick-deploy-container/docker-compose.yml up -d
+```
+
+## Docker Compose V2
+
+```shell
+docker compose -f .quick-deploy-container/docker-compose.yml up -d
+```
+
+you can run the above command without `-d` to view logs
 
 The environment is now running inside docker. To run bench commands we need to enter the interactive shell with the following command:
 ```shell
-docker exec -e "TERM=xterm-256color" -w /workspace/development -it quick-deploy-container-frappe-1 bash
+docker exec -e "TERM=xterm-256color" -w /workspace/quick-deploy -it frappe bash
 ```
 
 ### Setup first bench
@@ -179,7 +198,7 @@ Note: To start bench with debugger refer section for debugging.
 
 ## Use additional services during development
 
-Add any service that is needed for development in the `.devcontainer/docker-compose.yml` then rebuild and reopen in devcontainer.
+Add any service that is needed for development in the `.quick-deploy-container/docker-compose.yml` then rebuild and reopen in quick-deploy-container.
 
 e.g.
 
@@ -201,5 +220,5 @@ volumes:
   postgresql-data:
 ```
 
-Access the service by service name from the `frappe` development container. The above service will be accessible via hostname `postgresql`. If ports are published on to host, access it via `localhost:5432`.
+Access the service by service name from the `frappe` container. The above service will be accessible via hostname `postgresql`. If ports are published on to host, access it via `localhost:5432`.
 
