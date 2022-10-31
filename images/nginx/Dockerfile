@@ -2,7 +2,11 @@ FROM frappe/bench:latest as assets_builder
 
 ARG FRAPPE_VERSION
 ARG FRAPPE_REPO=https://github.com/frappe/frappe
-RUN bench init --version=${FRAPPE_VERSION} --frappe-path=${FRAPPE_REPO} --skip-redis-config-generation --verbose --skip-assets /home/frappe/frappe-bench
+ARG PYTHON_VERSION
+ARG NODE_VERSION
+ENV NVM_DIR=/home/frappe/.nvm
+ENV PATH ${NVM_DIR}/versions/node/v${NODE_VERSION}/bin/:${PATH}
+RUN PYENV_VERSION=${PYTHON_VERSION} bench init --version=${FRAPPE_VERSION} --frappe-path=${FRAPPE_REPO} --skip-redis-config-generation --verbose --skip-assets /home/frappe/frappe-bench
 
 WORKDIR /home/frappe/frappe-bench
 
@@ -36,7 +40,7 @@ RUN git clone --depth 1 ${BENCH_REPO} /tmp/bench \
     && mv /tmp/bench/bench/config/templates/502.html /out \
     && touch /out/.build
 
-FROM nginxinc/nginx-unprivileged:1.23.1-alpine as frappe
+FROM nginxinc/nginx-unprivileged:1.23.2-alpine as frappe
 
 # https://github.com/nginxinc/docker-nginx-unprivileged/blob/main/stable/alpine/20-envsubst-on-templates.sh
 COPY nginx-template.conf /etc/nginx/templates/default.conf.template
