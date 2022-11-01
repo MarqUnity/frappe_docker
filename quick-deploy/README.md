@@ -172,6 +172,10 @@ At the time of this writing, the Payments app has been factored out of the Versi
 bench get-app --branch version-14 --resolve-deps erpnext
 bench --site mysite.localhost install-app erpnext
 ```
+if the above does not work you may remove '--resolve-deps' and install the dependancies manually. For example
+```shell
+bench get-app --branch version-14 payments
+```
 
 To install ERPNext (from the version-13 branch):
 
