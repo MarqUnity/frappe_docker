@@ -50,13 +50,13 @@ docker pull frappe/bench:latest
 ```
 
 
-## Docker Compose V1
+#### Docker Compose V1
 
 ```shell
 docker-compose -f .quick-deploy-container/docker-compose.yml up -d
 ```
 
-## Docker Compose V2
+#### Docker Compose V2
 
 ```shell
 docker compose -f .quick-deploy-container/docker-compose.yml up -d
